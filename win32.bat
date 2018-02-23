@@ -54,10 +54,9 @@ REM set PATH=%PATH%;c:\cygwin\bin
 REM ======================================================
 REM --------------- EPICS --------------------------------
 REM ======================================================
-REM default to x64 if not defined
-if "%EPICS_HOST_ARCH%" == "" (
-  set EPICS_HOST_ARCH=windows-x64
-)
+REM default to x64
+set EPICS_HOST_ARCH=windows-x64
+
 
 REM ======================================================
 REM   --------------- Visual c++ -------------------------
@@ -73,6 +72,17 @@ if exist "C:\Program files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxil
 if exist "C:\Program files (x86)\Microsoft Visual Studio\2017\Professional\VC\Auxiliary\Build" (
     set VCVERSION=15.0
     set "VCVARALLDIR=C:\Program files (x86)\Microsoft Visual Studio\2017\Professional\VC\Auxiliary\Build"
+)
+
+if exist "C:\Program files (x86)\Microsoft Visual Studio %VCVERSION%\VC\vcvarsall.bat" (
+    if exist "C:\Program files (x86)\Microsoft Visual Studio %VCVERSION%\VC\bin\amd64\cl.exe" (
+        @echo Using Visual Studio %VCVERSION% x64 compiler
+        call "C:\Program files (x86)\Microsoft Visual Studio %VCVERSION%\VC\vcvarsall.bat" x64
+    ) else (
+        @echo Could not find Visual Studio %VCVERSION% x64 compilier
+    )
+) else (
+    @echo Could not find Visual Studio %VCVERSION% vcvarsall.bat
 )
 
 
