@@ -10,7 +10,7 @@ REM  in file LICENSE that is included with this distribution.
 REM *************************************************************************
 REM
 REM  Site-specific EPICS environment settings
-REM 
+REM
 REM  sites should modify these definitions
 
 REM ======================================================
@@ -32,7 +32,7 @@ REM   ---------------- make and perl ---------------------
 REM ======================================================
 
 REM   --------------- ActiveState perl -------------------
-set PATH=C:\Perl\bin;%PATH%
+set PATH=C:\Strawberry\perl\bin;%PATH%
 
 REM    --------------- mingw make ------------------------
 REM set PATH=C:\mingw-make\bin;%PATH%
@@ -45,44 +45,36 @@ REM ======================================================
 REM ---------------- cygwin tools ------------------------
 REM ======================================================
 REM    (make & perl if above perl and make are REMs)
-REM    Dont use cygwin GNU make and Perl!  
+REM    Dont use cygwin GNU make and Perl!
 REM    cygwin contains tk/tcl, vim, perl, and many unix tools
 REM    need grep from here NOT from cvs directory
 REM set PATH=%PATH%;.;..
 REM set PATH=%PATH%;c:\cygwin\bin
 
 REM ======================================================
-REM   --------------- Visual c++ -------------------------
-REM ======================================================
-
-REM    ------ Microsoft Visual Studio 2005 ------
-REM call "C:\Program files\Microsoft Visual Studio 8\VC\vcvarsall.bat" x86_amd64
-REM set PATH=%PATH%;C:\Program Files\Microsoft SDKs\Windows\v6.0A\bin
-REM set INCLUDE=%INCLUDE%;C:\Program Files\Microsoft SDKs\Windows\v6.0A\include
-REM REM set LIBPATH=%LIBPATH%;C:\Program Files\Microsoft SDKs\Windows\v6.0A\lib
-REM set LIB=%LIB%;C:\Program Files\Microsoft SDKs\Windows\v6.0A\lib
-
-REM    ------ Microsoft Visual Studio 2008 ------
-REM call "C:\Program files\Microsoft Visual Studio 9.0\VC\bin\vcvars32.bat"
-REM call "C:\Program files\Microsoft Visual Studio 9.0\VC\vcvarsall.bat" x86_amd64
-REM set    PATH=C:\Program Files\Microsoft SDKs\Windows\v7.0\bin;%PATH%
-REM set INCLUDE=C:\Program Files\Microsoft SDKs\Windows\v7.0\include;%INCLUDE%
-REM set LIBPATH=C:\Program Files\Microsoft SDKs\Windows\v7.0\lib;%LIBPATH%
-REM set     LIB=C:\Program Files\Microsoft SDKs\Windows\v7.0\lib;%LIB%
-
-REM    ----- Visual Studion 2010 -----
-REM --  windows-x64 ---
-REM call "C:\Program files\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x64
-REM --  win32-x86 ---
-call "C:\Program files\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" x86
-
-REM ======================================================
 REM --------------- EPICS --------------------------------
 REM ======================================================
-REM set EPICS_HOST_ARCH=windows-x64
-set EPICS_HOST_ARCH=win32-x86
-set PATH=%PATH%;G:\epics\base\bin\%EPICS_HOST_ARCH%
-set PATH=%PATH%;G:\epics\extensions\bin\%EPICS_HOST_ARCH%
+REM default to x64 if not defined
+if "%EPICS_HOST_ARCH%" == "" (
+  set EPICS_HOST_ARCH=windows-x64
+)
+
+REM ======================================================
+REM   --------------- Visual c++ -------------------------
+REM ======================================================
+REM for now just VS2015 and VS2017
+if exist "C:\Program files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" set VCVERSION=14.0
+
+REM for VS2017 the install is different for the 'free' version and the 'pro' version
+if exist "C:\Program files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build" (
+    set VCVERSION=15.0
+    set "VCVARALLDIR=C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build"
+)
+if exist "C:\Program files (x86)\Microsoft Visual Studio\2017\Professional\VC\Auxiliary\Build" (
+    set VCVERSION=15.0
+    set "VCVARALLDIR=C:\Program files (x86)\Microsoft Visual Studio\2017\Professional\VC\Auxiliary\Build"
+)
+
 
 REM ======================================================
 REM ------- OPTIONAL ENVIRONMENT VARIABLES FOLLOW --------
@@ -99,7 +91,7 @@ REM set HOME=c:/users/jba
 REM ======================================================
 REM ------------------- Bazaar ---------------------------
 REM ======================================================
-set PATH=%PATH%;C:\Program files\Bazaar
+REM set PATH=%PATH%;C:\Program files\Bazaar
 
 REM ======================================================
 REM ----------------- GNU make flags ---------------------
@@ -144,4 +136,3 @@ REM set EX_VER=12.00
 REM set EX_VER=14.00
 REM set PATH=%PATH%;C:\Exceed%EX_VER%\XDK\
 REM set PATH=%PATH%;C:\Program Files\Hummingbird\Connectivity\%EX_VER%\Exceed\
-
